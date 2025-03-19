@@ -1,24 +1,7 @@
-/**
-=========================================================
-* Material Dashboard 3 PRO React - v2.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-pro-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useEffect, useState } from "react";
 
-// react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, useNavigate } from "react-router-dom";
 
-// prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
 // @mui material components
@@ -26,27 +9,26 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
+import Button from "@mui/material/Button";
 
-// Material Dashboard 3 PRO React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-// Material Dashboard 3 PRO React examples
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavList from "examples/Sidenav/SidenavList";
 import SidenavItem from "examples/Sidenav/SidenavItem";
 
-// Custom styles for the Sidenav
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
-// Material Dashboard 3 PRO React context
 import {
   useMaterialUIController,
   setMiniSidenav,
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+
+import { useAuth } from "context/AuthContext";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [openCollapse, setOpenCollapse] = useState(false);
@@ -60,6 +42,9 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const items = pathname.split("/").slice(1);
   const itemParentName = items[1];
   const itemName = items[items.length - 1];
+
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   let textColor = "white";
 
@@ -77,7 +62,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, []);
 
   useEffect(() => {
-    // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
       setTransparentSidenav(
@@ -90,15 +74,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       );
     }
 
-    /** 
-     The event listener that's calling the handleMiniSidenav function when resizing the window.
-    */
     window.addEventListener("resize", handleMiniSidenav);
 
-    // Call the handleMiniSidenav function to set the state with the initial value.
     handleMiniSidenav();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleMiniSidenav);
   }, [dispatch, location]);
 
@@ -167,8 +146,26 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       return <SidenavList key={key}>{returnValue}</SidenavList>;
     });
 
-  // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(
+  const filteredRoutes = routes.filter((route) => {
+      if (!user) return false;
+
+      if (["my-courses", "my-tasks", "my-kanban"].includes(route.key)) {
+        return user.usertype === "student";
+      }
+
+      if (["all-courses", "all-students"].includes(route.key)) {
+        return user.usertype === "teacher"; 
+      }
+
+      return true;
+    });
+
+    const handleLogout = () => {
+      logout();
+      navigate("/authentication/sign-in/cover");
+    };
+    
+  const renderRoutes = filteredRoutes.map(
     ({ type, name, icon, title, collapse, noCollapse, key, href, route }) => {
       let returnValue;
 
@@ -285,10 +282,10 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <MDTypography
               component="h6"
               variant="button"
-              fontWeight="regular"
+              fontWeight="bold"
               color={textColor}
             >
-              {brandName}
+              Oqulabs
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -300,17 +297,26 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       <List>{renderRoutes}</List>
+      <MDBox px={3} py={2}>
+        <Button
+          variant="contained"
+          color="error"
+          fullWidth
+          startIcon={<Icon>logout</Icon>}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
+      </MDBox>
     </SidenavRoot>
   );
 }
 
-// Setting default values for the props of Sidenav
 Sidenav.defaultProps = {
   color: "info",
   brand: "",
 };
 
-// Typechecking props for the Sidenav
 Sidenav.propTypes = {
   color: PropTypes.oneOf([
     "primary",

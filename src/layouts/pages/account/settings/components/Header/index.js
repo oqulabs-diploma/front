@@ -1,37 +1,13 @@
-/**
-=========================================================
-* Material Dashboard 3 PRO React - v2.3.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-pro-react
-* Copyright 2024 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Switch from "@mui/material/Switch";
 
-// Material Dashboard 3 PRO React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 
-// Images
 import burceMars from "assets/images/bruce-mars.jpg";
 
 function Header() {
-  const [visible, setVisible] = useState(true);
-
-  const handleSetVisible = () => setVisible(!visible);
 
   return (
     <Card id="profile">
@@ -48,21 +24,6 @@ function Header() {
               <MDTypography variant="button" color="text" fontWeight="medium">
                 CEO / Co-Founder
               </MDTypography>
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3} sx={{ ml: "auto" }}>
-            <MDBox
-              display="flex"
-              justifyContent={{ md: "flex-end" }}
-              alignItems="center"
-              lineHeight={1}
-            >
-              <MDTypography variant="caption" fontWeight="regular">
-                Switch to {visible ? "invisible" : "visible"}
-              </MDTypography>
-              <MDBox ml={1}>
-                <Switch checked={visible} onChange={handleSetVisible} />
-              </MDBox>
             </MDBox>
           </Grid>
         </Grid>
