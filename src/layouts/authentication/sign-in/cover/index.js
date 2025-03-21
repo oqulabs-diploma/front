@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "context/AuthContext";
 
 import Card from "@mui/material/Card";
@@ -107,8 +107,8 @@ function Cover() {
               <MDTypography variant="button" color="text">
                 Not a member?{" "}
                 <MDTypography
-                  component="a"
-                  href="/authentication/sign-up/cover"
+                  component={Link}
+                  to="/sign-up/cover"
                   variant="button"
                   color="info"
                   fontWeight="medium"

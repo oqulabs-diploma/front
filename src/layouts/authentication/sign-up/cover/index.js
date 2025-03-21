@@ -29,21 +29,24 @@ function Cover() {
             Join us today
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your name, email and password to register
+            Enter your name, surname, email and password to register
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
+              <MDBox mb={2}>
+                <MDInput
+                  type="email"
+                  label="Email"
+                  variant="standard"
+                  fullWidth
+                />
+              </MDBox>
               <MDInput type="text" label="Name" variant="standard" fullWidth />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput
-                type="email"
-                label="Email"
-                variant="standard"
-                fullWidth
-              />
+              <MDInput type="text" label="Surname" variant="standard" fullWidth />
             </MDBox>
             <MDBox mb={2}>
               <MDInput

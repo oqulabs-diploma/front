@@ -2,7 +2,6 @@ import Grid from "@mui/material/Grid";
 
 import MDBox from "components/MDBox";
 
-import BaseLayout from "layouts/pages/account/components/BaseLayout";
 import Header from "layouts/pages/account/settings/components/Header";
 import BasicInfo from "layouts/pages/account/settings/components/BasicInfo";
 import ChangePassword from "layouts/pages/account/settings/components/ChangePassword";
