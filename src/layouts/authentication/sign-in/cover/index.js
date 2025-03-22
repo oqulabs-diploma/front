@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "context/AuthContext";
+import { login as loginUser } from "network/requests"
 
 import Card from "@mui/material/Card";
-
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 import CoverLayout from "layouts/authentication/components/CoverLayout";
-
 import bgImage from "assets/images/bg-sign-in-cover.jpeg";
-
-import { mockData } from "network/mockData";
 
 function Cover() {
   const { login } = useAuth();
@@ -22,26 +19,23 @@ function Cover() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
-    const user = mockData.users.find(
-      (u) => u.email === email && u.password === password
-    );
+    try {
+      const userData = await loginUser(email, password);
+      login(userData);
 
-    if (user) {
-      // localStorage.setItem("user", JSON.stringify(user));
-      login(user);
-
-      // Перенаправление в зависимости от типа пользователя
-      if (user.usertype === "student") {
+      if (userData.usertype === "student") {
         navigate("/student/my-courses");
-      } else if (user.usertype === "teacher") {
+      } else if (userData.usertype === "teacher") {
         navigate("/teacher/all-courses");
+      } else {
+        navigate("/student/my-courses");
       }
-    } else {
-      setError("Invalid email or password");
+    } catch (error) {
+      setError(error.message || "Login failed. Please try again.");
     }
   };
 
@@ -73,7 +67,7 @@ function Cover() {
                 label="Email"
                 variant="standard"
                 fullWidth
-                placeholder="your-email@test.com"
+                placeholder="email@example.com"
                 InputLabelProps={{ shrink: true }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

@@ -148,14 +148,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   const filteredRoutes = routes.filter((route) => {
       if (!user) return false;
-
-      if (["my-courses", "my-tasks", "my-kanban"].includes(route.key)) {
-        return user.usertype === "student";
-      }
-
+      
       if (["all-courses", "all-students"].includes(route.key)) {
         return user.usertype === "teacher"; 
       }
+      else (["my-courses", "my-tasks", "my-kanban"].includes(route.key))
+    
 
       return true;
     });
