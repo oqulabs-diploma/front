@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "context/AuthContext";
-import { login as loginUser } from "network/requests"
+import { login as loginUser } from "network/requests";
 
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
@@ -24,15 +24,16 @@ function Cover() {
     setError("");
 
     try {
-      const userData = await loginUser(email, password);
-      login(userData);
+      const { user, access, refresh } = await loginUser(email, password);
 
-      if (userData.usertype === "student") {
+      login({ user, access, refresh });
+
+      if (user.role === "student") {
         navigate("/student/my-courses");
-      } else if (userData.usertype === "teacher") {
+      } else if (user.role === "teacher") {
         navigate("/teacher/all-courses");
       } else {
-        navigate("/student/my-courses");
+        navigate("/");
       }
     } catch (error) {
       setError(error.message || "Login failed. Please try again.");

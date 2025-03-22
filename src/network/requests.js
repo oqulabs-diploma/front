@@ -13,20 +13,18 @@ export const register = async (userData) => {
 
 // логин
 export const login = async (email, password) => {
-  try {
-    const response = await API.post("/login", { email, password });
-
-    if (response.data?.access) {
-      localStorage.setItem("access", response.data.access);
+    try {
+      const response = await API.post("/login", { email, password });
+  
+      const { access, refresh, role } = response.data;
+  
+      return {
+        accessToken: access,
+        refreshToken: refresh,
+        user: { role, email },
+      };
+    } catch (error) {
+      console.error("Sign In Error:", error.response?.data || error.message);
+      throw error.response?.data || error;
     }
-
-    if (response.data?.refresh) {
-      localStorage.setItem("refresh", response.data.refresh);
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error("Sign In Error:", error.response?.data || error.message);
-    throw error.response?.data || error;
-  }
-};
+  };

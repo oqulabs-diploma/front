@@ -6,9 +6,7 @@ import Kanban from "student/kanban";
 import DataTables from "teacher/data-tables";
 
 import MDAvatar from "components/MDAvatar";
-
 import Icon from "@mui/material/Icon";
-
 import profilePicture from "assets/images/team-3.jpg";
 
 const routes = [
@@ -23,11 +21,15 @@ const routes = [
         key: "profile-settings",
         route: "/pages/account/settings",
         component: <Settings />,
+        protected: true,
+        allowedRoles: ["student", "teacher"],
       },
     ],
   },
+
   { type: "divider", key: "divider-0" },
   { type: "title", title: "Pages", key: "title-pages" },
+
   {
     type: "collapse",
     name: "My Courses",
@@ -36,6 +38,8 @@ const routes = [
     route: "/student/my-courses",
     component: <MyCourses />,
     noCollapse: true,
+    protected: true,
+    allowedRoles: ["student"],
   },
   {
     type: "collapse",
@@ -45,15 +49,19 @@ const routes = [
     route: "/student/my-tasks",
     component: <MyTasks />,
     noCollapse: true,
+    protected: true,
+    allowedRoles: ["student"],
   },
   {
     type: "collapse",
     name: "Kanban",
-    key: "my-courses",
+    key: "kanban",
     icon: <Icon fontSize="small">view_kanban</Icon>,
     route: "/student/kanban",
     component: <Kanban />,
     noCollapse: true,
+    protected: true,
+    allowedRoles: ["student"],
   },
   {
     type: "collapse",
@@ -63,6 +71,8 @@ const routes = [
     route: "/teacher/all-courses",
     component: <AllCourses />,
     noCollapse: true,
+    protected: true,
+    allowedRoles: ["teacher"],
   },
   {
     type: "collapse",
@@ -72,6 +82,8 @@ const routes = [
     route: "/teacher/all-students",
     component: <DataTables />,
     noCollapse: true,
+    protected: true,
+    allowedRoles: ["teacher"],
   },
 ];
 
